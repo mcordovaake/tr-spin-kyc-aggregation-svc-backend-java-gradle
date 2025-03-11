@@ -1,0 +1,20 @@
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: spin-kyc-aggregation-svc-api
+  description: The Smartylighting Streetlights API allows you to remotely manage the city lights.
+  tags:
+    - aws
+    - eventbridge
+    - kyc
+  links:
+    - url: https://github.com/asyncapi/spec/blob/master/examples/streetlights-mqtt-asyncapi.yml
+      title: Source Code
+      icon: code
+spec:
+  type: asyncapi
+  lifecycle: production
+  owner: fintechdigitalventure/servicios-financieros-pod-hades
+  system: spin_oxxo_pos_activacion_de_cuentas
+  definition:
+    $text: ./spin-kyc-aggregation-svc-aas.yaml
