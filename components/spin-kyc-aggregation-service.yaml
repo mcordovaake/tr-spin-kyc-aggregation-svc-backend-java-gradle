@@ -1,0 +1,30 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: spin-kyc-aggregation-service
+  description: |
+    spin-kyc-aggregation-service
+  tags:
+    - java-gradle
+  links:
+    - title: Code Repository
+      url: https://github.com/fintechdigitalventure/tr-spin-kyc-aggregation-svc-backend-java-gradle
+    - title: Kubernetes Repository
+      url: https://github.com/fintechdigitalventure/tr-spin-kyc-aggregation-svc-backend-java-gradle-kubernetes
+    - title: AWS ALB - Health
+      url: https://dev-gen-internal2.api.oxxofintech.com.mx/kyc-aggregation-service/actuator/health
+
+  annotations:
+    github.com/project-slug: fintechdigitalventure/tr-spin-kyc-aggregation-svc-backend-java-gradle
+    backstage.io/techdocs-ref: dir:.
+    lighthouse.com/website-url: https://backstage.io
+    sonarqube.org/project-key: fintechdigitalventure_tr-spin-kyc-aggregation-svc-backend-java-gradle
+    backstage.io/code-coverage: scm-only
+    backstage.io/kubernetes-id: dice-roller
+    snyk.io/org-id: 7f5a5f84-8619-47b1-92e2-cbc67a902765
+    snyk.io/targets: fintechdigitalventure/tr-spin-kyc-aggregation-svc-backend-java-gradle,fintechdigitalventure_tr-spin-kyc-aggregation-svc-backend-java-gradle
+spec:
+  system: spin_oxxo_pos_activacion_de_cuentas
+  type: service
+  owner: fintechdigitalventure/spin-pod-hercules-kyc
+  lifecycle: production
