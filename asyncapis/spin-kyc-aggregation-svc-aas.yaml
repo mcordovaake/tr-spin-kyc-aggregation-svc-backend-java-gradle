@@ -1,0 +1,178 @@
+asyncapi: 3.0.0
+info:
+  title: KYC Aggregation Service
+  version: 1.0.0
+  description: |-
+    ### This API manages the lifecycle of both physical and digital cards. This microservice publishes events related to the card domain.
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+defaultContentType: application/json
+
+servers:
+  aws-eventbridge:
+    host: arn:aws:events:us-east-1:{env}:event-bus/ffss-event-bus-{env}
+    protocol: aws-eventbridge
+    description: Sending events for different card operations
+    variables:
+      source:
+        description: FFSS card events core
+        default: ffss.cards.core
+      detailType:
+        description: The operation to be executed
+        default: CardDeleted, CardSuspended, CardReactivated and CardRenewed
+      Detail:
+        description: Specific event payload in JSON format
+        default: application/json
+    tags:
+      - name: Card Operations
+      - name: Card Delete
+      - name: Card Suspend
+      - name: Card Resumen
+      - name: Card Aggregation Services
+
+channels:
+  CardDeleted:
+    address: ffss-event-bus-{env}/ffss.cards.core/CardDeleted
+    messages:
+      CardDeleted:
+        $ref: '#/components/messages/Generic'
+    description: Event indicating that a card has been removed
+  CardSuspended:
+    address: ffss-event-bus-{env}/ffss.cards.core/CardSuspended
+    messages:
+      CardSuspended:
+        $ref: '#/components/messages/Generic'
+    description: Event indicating that a card has been suspended
+  CardReactivated:
+    address: ffss-event-bus-{env}/ffss.cards.core/CardReactivated
+    messages:
+      CardReactivated:
+        $ref: '#/components/messages/Generic'
+    description: Event indicating that a card has been reactivated
+  CardRenewed:
+    address: ffss-event-bus-{env}/ffss.cards.core/CardRenewed
+    messages:
+      CardRenewed:
+        $ref: '#/components/messages/CardRenewed'
+    description: Event indicating that a card has been renewed
+operations:
+  CardDeleted:
+    action: send
+    channel:
+      $ref: '#/channels/CardDeleted'
+    summary: >-
+      The user or call center can delete the card. Once the permanent blocking process has been executed, a successful blocking triggers this event.
+    messages:
+      - $ref: '#/channels/CardDeleted/messages/CardDeleted'
+  CardSuspended:
+    action: send
+    channel:
+      $ref: '#/channels/CardSuspended'
+    summary: >-
+      The card can be suspended by the user or the call center. Once the suspension process has been executed, a successful suspension triggers this event.
+    messages:
+      - $ref: '#/channels/CardSuspended/messages/CardSuspended'
+  CardReactivated:
+    action: send
+    channel:
+      $ref: '#/channels/CardReactivated'
+    summary: >-
+      The card can be reactivated by the user or the call center. Once the reactivation process has been executed, a successful reactivation triggers this event.
+    messages:
+      - $ref: '#/channels/CardReactivated/messages/CardReactivated'
+  CardRenewed:
+    action: send
+    channel:
+      $ref: '#/channels/CardRenewed'
+    summary: >-
+      The card can be replaced by the user or by the call center. Once the replacement process is executed, a successful replacement triggers this event.
+    messages:
+      - $ref: '#/channels/CardRenewed/messages/CardRenewed'
+components:
+  messages:
+    Generic:
+      name: Card Operation
+      title: Card Operation
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/CardUpdatedGenericPayload'
+    CardRenewed:
+      name: Card Renewed
+      title: Card Renewed
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/CardRenewed'
+  schemas:
+    CardUpdatedGenericPayload:
+      type: object
+      properties:
+        origin:
+          type: string
+          description: constant SPINBYOXXO.
+        cardId:
+          type: string
+          description: Card id
+        issuerId:
+          type: string
+          description: Constant id SPIN0_MX_1.
+        reason:
+          type: string
+          description: Reason for deleting the token.
+        reasonCode:
+          type: string
+          description: This property is a constant that only allows the following.
+          enum:
+            - USER_DECISION
+            - ISSUER_DECISION
+            - DEVICE_LOST
+            - DEVICE_STOLEN
+            - CARD_LOST
+            - CARD_STOLEN
+        cardType:
+          type: string
+          description: Physical or digital card.
+        traceId:
+          type: string
+          description: Trace of the request.
+
+    CardRenewed:
+      type: object
+      properties:
+        reason:
+          type: string
+          description: Reason for deleting the token.
+        reasonCode:
+          type: string
+          description: This property is a constant that only allows the following
+          enum:
+            - USER_DECISION
+            - ISSUER_DECISION
+            - DEVICE_LOST
+            - DEVICE_STOLEN
+            - CARD_LOST
+            - CARD_STOLEN
+        origin:
+          type: string
+          description: constant SPINBYOXXO.
+        cardType:
+          type: string
+          description: Physical or digital card.
+        cardState:
+          type: string
+          description: Status of card, example ACTIVE.
+        cardId:
+          type: string
+          description: Card id
+        issuerId:
+          type: string
+          description: Constant id provided by thales.
+        traceId:
+          type: string
+          description: Trace of the request.
+        newCardId:
+          type: string
+          description: The ID of the card with which the old card will be replaced.
+        encryptedData:
+          type: string
+          description: Encrypted data containing the card expiration date and the CVV.
