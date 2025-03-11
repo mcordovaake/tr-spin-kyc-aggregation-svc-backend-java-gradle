@@ -1,0 +1,8 @@
+apiVersion: backstage.io/v1alpha1
+kind: Location
+metadata:
+  name: catalog-component-kyc-aggregation-svc
+  description: A collection of all Backstage example entities, except users, groups, and templates
+spec:
+  targets:
+    - ./components/spin-kyc-aggregation-svc.yaml
