@@ -6,4 +6,4 @@ metadata:
 spec:
   targets:
     - ./components/spin-kyc-aggregation-svc.yaml
-    - ./asyncapis/spin-kyc-aggregation-api.yaml
+    - ./asyncapis/spin-kyc-aggregation-svc-api.yaml
