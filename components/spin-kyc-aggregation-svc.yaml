@@ -30,3 +30,5 @@ spec:
   system: spin_oxxo_pos_activacion_de_cuentas
   providesApis:
     - spin-kyc-aggregation-svc-api
+  consumesApis:
+    - spin-account-svc-api-async
